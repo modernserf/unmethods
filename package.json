@@ -1,0 +1,15 @@
+{
+  "name": "haskell-envy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node node_modules/eslint/bin/eslint.js src/ --ext .js"
+  },
+  "author": "Justin Falcone <justin@justinfalcone.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-eslint": "^3.1.23",
+    "eslint": "^1.0.0-rc-1"
+  }
+}
