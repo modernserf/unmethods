@@ -3,6 +3,7 @@
 export const HASKEY = Symbol("Has key");
 export const GETKEY = Symbol("Get key");
 
+// adding HASKEY / GETKEY to Object.prototype would be missing the point
 export const get = (key, otherwise) => (coll) => {
     if (coll.constructor === Object) {
         return coll.hasOwnProperty(key) ? coll[key] : otherwise;
