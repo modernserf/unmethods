@@ -1,15 +1,24 @@
 {
-  "name": "haskell-envy",
+  "name": "you-might-not-need-methods",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node node_modules/eslint/bin/eslint.js src/ --ext .js"
+    "lint": "node node_modules/eslint/bin/eslint.js src/ --ext .js",
+    "tape": "node_modules/.bin/babel-tape-runner src/**/*-test.js | node_modules/.bin/faucet",
+    "tape-runner": "npm run tape || tput bel",
+    "test": "npm run lint && npm run tape",
+    "test-watch": "fswatch -0 src/ | xargs -0 -n1 -I{} npm run tape-runner"
   },
   "author": "Justin Falcone <justin@justinfalcone.com>",
   "license": "MIT",
   "devDependencies": {
     "babel-eslint": "^3.1.23",
     "eslint": "^1.0.0-rc-1"
+  },
+  "dependencies": {
+    "babel-tape-runner": "^1.2.0",
+    "faucet": "0.0.1",
+    "tape": "^4.2.0"
   }
 }

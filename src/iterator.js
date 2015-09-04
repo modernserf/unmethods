@@ -1,90 +1,112 @@
-import { curry1, curry2, curry3 } from "function";
+import { curry1, curry2, curry3 } from "./function";
 
-export const INTO = Symbol('iterator/INTO');
+const wrap = (curry,g) => curry(function (...args) {
+    return {
+        [Symbol.iterator]: function () {
+            return g(...args);
+        }
+    };
+});
 
-// usage: iter::into([]) or iter::into(Array)
-export const into = curry2((iter, dest) =>
-    dest[INTO] ? dest[INTO](iter) : dest.prototype[INTO](iter));
-
-export const map = curry2(function* (iter, fn) {
+export const map = wrap(curry2, function* (iter, f) {
     for (let item of iter) {
-        yield fn(item);
+        yield f(item);
     }
 });
 
-export const filter = curry2(function* (iter,pred) {
+export const forEach = curry2((iter, f) => {
     for (let item of iter) {
-        if (pred(item)) { yield item; }
+        f(item);
+    }
+    return iter;
+});
+
+export const filter = wrap(curry2, function* (iter, p) {
+    for (let item of iter) {
+        if (p(item)) { yield item; }
     }
 });
 
-export const flatMap = curry2(function* (iter, fn) {
+export const flatMap = wrap(curry2, function* (iter, fn) {
     for (let item of iter) {
         yield* fn(item);
     }
 });
 
-export const ap = curry2(function* (iter, fnIter) {
-    for (let fn of fnIter) {
-        for (let item of iter) {
-            yield fn(item);
+export const partition = curry2((iter, getKey) => {
+    const t = new Map();
+    for (let item of iter) {
+        const key = getKey(item);
+        if (t.has(key)){
+            t.get(key).push(item);
+        } else {
+            t.set(key,[item]);
         }
     }
+    return t;
 });
 
-export const cons = curry2(function* (tail, head) {
-    yield head;
-    yield* tail;
-});
+export const into = curry2((iter, Constructor) =>
+    Constructor === Array ?
+        Array.from(iter) :
+        new Constructor(iter));
 
-export const conj = curry2(function* (rest, last) {
-    yield* rest;
-    yield last;
-});
-
-export const concat = curry1(function* (iters) {
-    for (let iter of iters) {
-        yield* iter;
-    }
-});
-
-// [[1,2,3],[4,5,6]] => [[1,4],[2,5],[3,6]]
-export const zip = curry1(function* (iters) {
-    if (iters::isEmpty()){ return; }
-
-    let rawIterators = iters::map((iter) => iter[Symbol.iterator]());
-    let done = false;
-
-    const getValues = () =>  rawIterators::map((iter) => {
-        let { value, done: _done } = iter.next();
-        if (_done){ done = true; }
-        return value;
-    });
-
-    while (done === false) {
-        let results = getValues();
-        if (!done){ yield results; }
-    }
-});
-
-export const prepend = curry2(function* (left, right) {
-    yield* right;
-    yield* left;
-});
-
-export const append = curry2(function* (left, right) {
-    yield* left;
-    yield* right;
-});
-
-export const scan = curry3(function* (iter, fn, seed) {
+export const reduce = curry3((iter, reducer, into) => {
     for (let item of iter) {
-        seed = fn(seed,item);
+        into = reducer(into, item);
+    }
+    return into;
+});
+
+export const generate = wrap((x) => x,function* (seed,f) {
+    while (true) { // eslint-disable-line no-constant-condition
         yield seed;
+        seed = f(seed);
     }
 });
 
-export const take = curry2(function* (iter,count) {
+export const scan = wrap(curry3, function* (iter, reducer, into) {
+    for (let item of iter) {
+        into = reducer(into,item);
+        yield into;
+    }
+});
+
+export const concat = wrap(curry2,function* (l, r) {
+    yield* l;
+    yield* r;
+});
+
+export const cons = wrap(curry2,function* (iter, val) {
+    yield val;
+    yield* iter;
+});
+
+export const push = wrap(curry2,function* (iter, val) {
+    yield* iter;
+    yield val;
+});
+
+// // [[1,2,3],[4,5,6]] => [[1,4],[2,5],[3,6]]
+// export const zip = curry1(function* (iters) {
+//     if (iters::isEmpty()){ return; }
+
+//     let rawIterators = iters::map((iter) => iter[Symbol.iterator]());
+//     let done = false;
+
+//     const getValues = () =>  rawIterators::map((iter) => {
+//         let { value, done: _done } = iter.next();
+//         if (_done){ done = true; }
+//         return value;
+//     });
+
+//     while (done === false) {
+//         let results = getValues();
+//         if (!done){ yield results; }
+//     }
+// });
+
+export const take = wrap(curry2,function* (iter,count) {
     for (let item of iter) {
         if (count <= 0){ break; }
         yield item;
@@ -92,14 +114,14 @@ export const take = curry2(function* (iter,count) {
     }
 });
 
-export const takeWhile = curry2(function* (iter,pred) {
+export const takeWhile = wrap(curry2, function* (iter,pred) {
     for (let item of iter) {
         if (!pred(item)){ break; }
         yield item;
     }
 });
 
-export const drop = curry2(function* (iter, count) {
+export const drop = wrap(curry2,function* (iter, count) {
     for (let item of iter) {
         if (count > 0){
             count--;
@@ -109,12 +131,12 @@ export const drop = curry2(function* (iter, count) {
     }
 });
 
-export const dropWhile = curry2(function* (iter,pred) {
+export const dropWhile = wrap(curry2,function* (iter,pred) {
     let dropping = true;
 
     for (let item of iter) {
         if (dropping) {
-            dropping = pred(dropping);
+            dropping = pred(item);
             if (!dropping){ yield item; }
         } else {
             yield item;
@@ -122,15 +144,7 @@ export const dropWhile = curry2(function* (iter,pred) {
     }
 });
 
-export const index = curry1(function* (iter){
-    let i = 0;
-    for (let item of iter) {
-        yield [i, item];
-        i++;
-    }
-});
-
-export const unique = curry1(function* (iter){
+export const unique = wrap(curry1,function* (iter){
     let set = new Set();
     for (let item of iter) {
         if (!set.has(item)){
@@ -140,48 +154,9 @@ export const unique = curry1(function* (iter){
     }
 });
 
-export const intersect = curry2(function* (left, right){
-    let set = new Set();
-    let lIter = left[Symbol.iterator]();
-    let rIter = right[Symbol.iterator]();
-    let l, r;
-
-    while (!(l = lIter.next()).done || !(r = rIter.next()).done) {
-        if (!l.done) {
-            if (set.has(l.value)){ yield l.value; }
-            set.add(l.value);
-        }
-        if (!r.done) {
-            if (set.has(r.value)){ yield r.value; }
-            set.add(r.value);
-        }
-    }
-});
-
-export const isEmpty = curry1((iter) => {
-    return iter[Symbol.iterator]().next().done;
-});
-
-export const reduce = curry3((iter, reducer, into) => {
-    for (let item of iter) {
-        into = reducer(into, item);
-    }
-    return into;
-});
-
-export const every = curry2((iter, pred) => {
-    for (let item of iter) {
-        if (!pred(item)){ return false; }
-    }
-    return true;
-});
-
-export const find = curry3((iter, pred, otherwise) => {
-    for (let item of iter) {
-        if (pred(item)){ return item; }
+export const first = curry2((iter,otherwise) => {
+    for (let item of iter){
+        return item;
     }
     return otherwise;
 });
-
-export const head = curry1((item) =>
-    item[Symbol.iterator]().next().value);

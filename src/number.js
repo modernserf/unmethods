@@ -1,4 +1,4 @@
-import { curry1, curry2 } from "function";
+import { curry1, curry2 } from "./function";
 
 // 1
 export const negate = curry1((a) => -a);
