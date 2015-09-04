@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "repository": {
+    "type":"git",
+    "url": "git@github.com:modernserf/you-might-not-need-methods.git"
+  },
   "scripts": {
     "lint": "node node_modules/eslint/bin/eslint.js src/ --ext .js",
     "tape": "node_modules/.bin/babel-tape-runner src/**/*-test.js | node_modules/.bin/faucet",
