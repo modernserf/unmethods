@@ -1,5 +1,5 @@
 import { curry1, curry2, curry3 } from "./function";
-import { map } from "./iterator";
+import { map, reduce } from "./iterator";
 
 const keyed = Symbol("keyed");
 
@@ -99,26 +99,17 @@ export const updateIn = curry3((coll,path,valueFn) => {
     return (coll || null)::update(key, rest.length ? updateIn(rest,valueFn) : valueFn);
 });
 
-export const merge = curry2((coll, other) => {
-    let result = coll;
-    for (let [key, value] of entries(other)) {
-        result = coll::set(key, value);
-    }
-    return result;
-});
+export const merge = curry2((coll, other) =>
+    other::entries()::reduce((result,[key, value]) =>
+        result::set(key,value), coll));
 
-export const deepMerge = curry2((coll,other) => {
-    let result = coll;
-    for (let [key, value] of entries(other)) {
-        const child = coll::get(key);
-        if (child && child[keyed] && value[keyed]){
-            result = coll::update(key, deepMerge(value));
-        } else {
-            result = coll::set(key,value);
-        }
-    }
-    return result;
-});
+export const deepMerge = curry2((coll,other) =>
+    other::entries()::reduce((result, [key, value]) => {
+        const child = result::get(key);
+        return child && child[keyed] && value[keyed] ?
+            result::update(key, deepMerge(value)) :
+            result::set(key,value);
+    }, coll));
 
 export const removeIn = curry2((coll,path) => {
     const [key,...rest] = path;
@@ -127,25 +118,13 @@ export const removeIn = curry2((coll,path) => {
         coll::remove(key);
 });
 
-export const select = curry2((coll, keys) => {
-    let result = empty(coll);
+export const select = curry2((coll, keys) =>
+    keys::reduce((c,key) =>
+        coll::has(key) ? c::set(key,coll::get(key)) : c
+    , empty(coll)));
 
-    for (let key of keys) {
-        if (coll::has(key)) {
-            result = result::set(key,coll::get(key));
-        }
-    }
-    return result;
-});
-
-export const omit = curry2((coll,keys) => {
-    let result = coll;
-
-    for (let key of keys) {
-        result = result::remove(key);
-    }
-    return result;
-});
+export const omit = curry2((coll,keys) =>
+    keys::reduce(remove,coll));
 
 // // keys must be finite
 // export const omit = curry2((coll, keys) => {
