@@ -1,5 +1,5 @@
 import { curry1, curry2, curry3 } from "./function";
-import { map, reduce } from "./iterator";
+import { map, filter, first, reduce } from "./iterator";
 
 const keyed = Symbol("keyed");
 
@@ -126,41 +126,13 @@ export const select = curry2((coll, keys) =>
 export const omit = curry2((coll,keys) =>
     keys::reduce(remove,coll));
 
-// // keys must be finite
-// export const omit = curry2((coll, keys) => {
-//     let set = new Set(keys);
-//     return entries(coll)::flatMap(([key, value]) =>
-//         set::has(key) ? [] : [[key, value]]);
-// });
+export const rename = curry2((coll,keyMap) =>
+    keyMap::entries()::reduce((res,[key,newKey]) =>
+        coll::has(key) ?
+            res::set(newKey, coll::get(key))::remove(key) :
+            res,
+        coll));
 
-// // relations (iter of keyed using same maps)
-// export const select = curry2(function* (rel, keys){
-//     for (let item of rel) {
-//         yield item::pick(keys);
-//     }
-// });
-
-// const _whereInner = (item, spec) =>
-//     entries(spec)::every(([key,value]) => value(item::get(key)));
-
-// export const where = curry2(function* (rel, spec){
-//     for (let item of rel){
-//         if (_whereInner(item,spec)){
-//             yield item;
-//         }
-//     }
-// });
-
-// export const join = curry2(function* (left, right) {
-//     let joinOn = keys(left)::intersect(keys(right));
-
-//     for (let l of left) {
-//         for (let r of right) {
-//             for (let key of joinOn) {
-//                 if (l::get(key) === r::get(key)){
-//                     yield l::merge(r);
-//                 }
-//             }
-//         }
-//     }
-// });
+export const match = curry2((coll,matcher) =>
+    !matcher::entries()::filter(([k,v]) =>
+        coll::get(k) !== v)::first());
