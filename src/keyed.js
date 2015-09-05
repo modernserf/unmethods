@@ -1,41 +1,103 @@
-import { comp, curry1, curry2, curry3 } from "function";
-import { map, flatMap, every, intersect } from 'iterator';
+import { curry1, curry2, curry3 } from "./function";
+import { map } from "./iterator";
 
-export const HAS_KEY = Symbol("keyed/HAS_KEY");
-export const GET_KEY = Symbol("keyed/GET_KEY");
-// returns a modified copy; does not mutate the original.
-export const SET_KEY = Symbol("keyed/SET_KEY");
-export const DELETE_KEY = Symbol("keyed/DELETE_KEY");
+const keyed = Symbol("keyed");
 
-// [key, value] pairs in iterator, as in map.
-export const ENTRIES = Symbol("keyed/ENTRIES");
+Object.prototype[keyed] = function () {
+    const self = this;
+    return {
+        get: (key) => this[key],
+        has: (key) => this.hasOwnProperty(key),
+        set: (key, value) => ({...this, [key]: value}),
+        remove: (key) => {
+            const dest = {};
+            for (let k in this) {
+                if (k !== key) {
+                    dest[k] = this[k];
+                }
+            }
+            return dest;
+        },
+        entries: function* () {
+            for (let k in self) {
+                yield [k, self[k]];
+            }
+        }
+    };
+};
 
-export const has = curry2((coll, key) => coll[HAS_KEY](key));
-export const get = curry2((coll, key) => coll[GET_KEY](key));
-export const set = curry3((coll,key,value) => coll[SET_KEY](key, value));
-export const remove = curry2((coll, key) => coll[DELETE_KEY](key));
+Map.prototype[keyed] = function () {
+    return {
+        get: (key) => this.get(key),
+        has: (key) => this.has(key),
+        set: (key, value) => new Map(this).set(key,value),
+        remove: (key) => {
+            const nextMap = new Map(this);
+            nextMap.delete(key);
+            return nextMap;
+        },
+        entries: () => this.entries()
+    };
+};
 
-export const entries = curry1((coll) => coll[ENTRIES]());
-export const keys = comp(map(get(0)),entries);
-export const values = comp(map(get(1)),entries);
+function empty (coll) {
+    return new coll.constructor();
+}
+
+export const get = curry2((coll, key) => coll[keyed]().get(key));
+
+export const set = curry3((coll,key,value) =>
+    coll[keyed]().set(key,value));
+
+export const has = curry2((coll,key) => coll[keyed]().has(key));
+
+export const remove = curry2((coll,key) => coll[keyed]().remove(key));
+
+export const entries = curry1((coll) => coll[keyed]().entries());
+
+export const keys = curry1((coll) => coll::entries()::map(([k]) => k));
+
+export const values = curry1((coll) => coll::entries()::map(([,v]) => v));
 
 export const fetch = curry3((coll, key, otherwiseFn) =>
     coll::has(key) ? coll::get(key) : otherwiseFn(coll));
 
+const notFound = Symbol();
+const _fetchIn = (coll,path) => {
+    if (!coll || !coll[keyed]){ return notFound; }
+
+    const [key,...rest] = path;
+    if (rest.length) {
+        return _fetchIn(coll::get(key),rest);
+    } else if (coll::has(key)) {
+        return coll::get(key);
+    } else {
+        return notFound;
+    }
+};
+
 export const fetchIn = curry3((coll, path, otherwiseFn) => {
-    let result = coll;
-    for (let key of path) {
-        if (result && result[GET_KEY]) {
-            result = result[GET_KEY](key);
-        } else {
-            return otherwiseFn(coll);
+    const result = _fetchIn(coll,path);
+    return result === notFound ? otherwiseFn(coll) : result;
+});
+
+export const fetchEither = curry3((coll,options,otherwiseFn) => {
+    for (let opt of options) {
+        if (coll::has(opt)) {
+            return coll::get(opt);
         }
     }
-    return result;
+    return otherwiseFn(coll);
 });
 
 export const update = curry3((coll, key, valueFn) =>
     coll::set(key,valueFn(coll::get(key))));
+
+export const updateIn = curry3((coll,path,valueFn) => {
+    const [key,...rest] = path;
+    // force error if no coll
+    return (coll || null)::update(key, rest.length ? updateIn(rest,valueFn) : valueFn);
+});
 
 export const merge = curry2((coll, other) => {
     let result = coll;
@@ -45,52 +107,81 @@ export const merge = curry2((coll, other) => {
     return result;
 });
 
-// keyed iterables
-export const invert = curry1(function* (iter){
-    for (let [key, value] of iter) {
-        yield [value, key];
-    }
-});
-
-export const pick = curry2((coll, keys) =>
-    keys::flatMap((key) =>
-        coll::has(key) ? [[key, coll::get(key)]] : []));
-
-// keys must be finite
-export const omit = curry2((coll, keys) => {
-    let set = new Set(keys);
-    return entries(coll)::flatMap(([key, value]) =>
-        set::has(key) ? [] : [[key, value]]);
-});
-
-// relations (iter of keyed using same maps)
-export const select = curry2(function* (rel, keys){
-    for (let item of rel) {
-        yield item::pick(keys);
-    }
-});
-
-const _whereInner = (item, spec) =>
-    entries(spec)::every(([key,value]) => value(item::get(key)));
-
-export const where = curry2(function* (rel, spec){
-    for (let item of rel){
-        if (_whereInner(item,spec)){
-            yield item;
+export const deepMerge = curry2((coll,other) => {
+    let result = coll;
+    for (let [key, value] of entries(other)) {
+        const child = coll::get(key);
+        if (child && child[keyed] && value[keyed]){
+            result = coll::update(key, deepMerge(value));
+        } else {
+            result = coll::set(key,value);
         }
     }
+    return result;
 });
 
-export const join = curry2(function* (left, right) {
-    let joinOn = keys(left)::intersect(keys(right));
+export const removeIn = curry2((coll,path) => {
+    const [key,...rest] = path;
+    return rest.length ?
+        coll::update(key,removeIn(rest)) :
+        coll::remove(key);
+});
 
-    for (let l of left) {
-        for (let r of right) {
-            for (let key of joinOn) {
-                if (l::get(key) === r::get(key)){
-                    yield l::merge(r);
-                }
-            }
+export const select = curry2((coll, keys) => {
+    let result = empty(coll);
+
+    for (let key of keys) {
+        if (coll::has(key)) {
+            result = result::set(key,coll::get(key));
         }
     }
+    return result;
 });
+
+export const omit = curry2((coll,keys) => {
+    let result = coll;
+
+    for (let key of keys) {
+        result = result::remove(key);
+    }
+    return result;
+});
+
+// // keys must be finite
+// export const omit = curry2((coll, keys) => {
+//     let set = new Set(keys);
+//     return entries(coll)::flatMap(([key, value]) =>
+//         set::has(key) ? [] : [[key, value]]);
+// });
+
+// // relations (iter of keyed using same maps)
+// export const select = curry2(function* (rel, keys){
+//     for (let item of rel) {
+//         yield item::pick(keys);
+//     }
+// });
+
+// const _whereInner = (item, spec) =>
+//     entries(spec)::every(([key,value]) => value(item::get(key)));
+
+// export const where = curry2(function* (rel, spec){
+//     for (let item of rel){
+//         if (_whereInner(item,spec)){
+//             yield item;
+//         }
+//     }
+// });
+
+// export const join = curry2(function* (left, right) {
+//     let joinOn = keys(left)::intersect(keys(right));
+
+//     for (let l of left) {
+//         for (let r of right) {
+//             for (let key of joinOn) {
+//                 if (l::get(key) === r::get(key)){
+//                     yield l::merge(r);
+//                 }
+//             }
+//         }
+//     }
+// });
