@@ -160,3 +160,15 @@ export const first = curry2((iter,otherwise) => {
     }
     return otherwise;
 });
+
+// Always returns array
+// TODO : lazy sort (heap sort?)
+export function sort (fn) {
+    return [...this].sort(fn);
+}
+
+export function sortBy (getter) {
+    return [...this].sort((a,b) =>
+        getter(a) > getter(b) ? 1 : -1);
+}
+

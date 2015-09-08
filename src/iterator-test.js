@@ -127,3 +127,6 @@ test("iter functions are lazy when possible", (assert) => {
     assert.deepEqual(res,items);
     assert.end();
 });
+
+test.skip("sort");
+test.skip("sortBy");
