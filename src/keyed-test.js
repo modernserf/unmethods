@@ -1,3 +1,4 @@
+import bindProtocols from "./index";
 import test from "tape";
 import { get, set, has, remove,
     entries, keys, values,
@@ -5,6 +6,8 @@ import { get, set, has, remove,
     update, updateIn,
     merge, deepMerge, removeIn,
     select, omit, rename, match } from "./keyed";
+
+bindProtocols();
 
 test("get",(assert) => {
     const obj = { foo: "bar"};
