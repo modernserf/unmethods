@@ -21,8 +21,10 @@
     "babel-eslint": "^3.1.23",
     "eslint": "^1.0.0-rc-1"
   },
+  "peerDependencies": {
+    "babel": "^5",
+  },
   "dependencies": {
-    "babel": "^5.8.23",
     "babel-tape-runner": "^1.2.0",
     "faucet": "0.0.1",
     "tape": "^4.2.0"
