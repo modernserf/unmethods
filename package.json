@@ -22,7 +22,7 @@
     "eslint": "^1.0.0-rc-1"
   },
   "peerDependencies": {
-    "babel": "^5",
+    "babel": "^5"
   },
   "dependencies": {
     "babel-tape-runner": "^1.2.0",
