@@ -1,9 +1,6 @@
-import bindProtocols from "./index";
 import test from "tape";
 import { get } from "./keyed";
 import { pluck, select, project, where, join, index } from "./relation";
-
-bindProtocols();
 
 test("pluck", (assert) => {
     const rel = [{

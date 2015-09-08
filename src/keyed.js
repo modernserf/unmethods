@@ -2,6 +2,48 @@ import { curry1, curry2, curry3 } from "./function";
 import { map, filter, first, reduce } from "./iterator";
 import { keyed } from "./constants";
 
+Object.prototype[keyed] = function () {
+    const self = this;
+
+    // :(
+    switch (this.constructor.name) {
+    case "Map":
+        const copy = () => new this.constructor(this);
+
+        return {
+            get: (key) => this.get(key),
+            has: (key) => this.has(key),
+            set: (key, value) => copy().set(key,value),
+            remove: (key) => {
+                const nextMap = copy();
+                nextMap.delete(key);
+                return nextMap;
+            },
+            entries: () => this.entries()
+        };
+    default:
+        return {
+            get: (key) => this[key],
+            has: (key) => this.hasOwnProperty(key),
+            set: (key, value) => ({...this, [key]: value}),
+            remove: (key) => {
+                const dest = {};
+                for (let k in this) {
+                    if (k !== key) {
+                        dest[k] = this[k];
+                    }
+                }
+                return dest;
+            },
+            entries: function* () {
+                for (let k in self) {
+                    yield [k, self[k]];
+                }
+            }
+        };
+    }
+};
+
 function empty (coll) {
     return new coll.constructor();
 }
