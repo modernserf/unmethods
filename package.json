@@ -1,13 +1,14 @@
 {
-  "name": "you-might-not-need-methods",
+  "name": "unmethods",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": {
-    "type":"git",
-    "url": "git@github.com:modernserf/you-might-not-need-methods.git"
+    "type": "git",
+    "url": "git@github.com:modernserf/unmethods.git"
   },
   "scripts": {
+    "install": "./node_modules/.bin/babel src/ -d dist/",
     "lint": "node node_modules/eslint/bin/eslint.js src/ --ext .js",
     "tape": "node_modules/.bin/babel-tape-runner src/**/*-test.js | node_modules/.bin/faucet",
     "tape-runner": "npm run tape || tput bel",
@@ -21,6 +22,7 @@
     "eslint": "^1.0.0-rc-1"
   },
   "dependencies": {
+    "babel": "^5.8.23",
     "babel-tape-runner": "^1.2.0",
     "faucet": "0.0.1",
     "tape": "^4.2.0"
