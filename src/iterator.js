@@ -87,25 +87,6 @@ export const push = wrap(curry2,function* (iter, val) {
     yield val;
 });
 
-// // [[1,2,3],[4,5,6]] => [[1,4],[2,5],[3,6]]
-// export const zip = curry1(function* (iters) {
-//     if (iters::isEmpty()){ return; }
-
-//     let rawIterators = iters::map((iter) => iter[Symbol.iterator]());
-//     let done = false;
-
-//     const getValues = () =>  rawIterators::map((iter) => {
-//         let { value, done: _done } = iter.next();
-//         if (_done){ done = true; }
-//         return value;
-//     });
-
-//     while (done === false) {
-//         let results = getValues();
-//         if (!done){ yield results; }
-//     }
-// });
-
 export const take = wrap(curry2,function* (iter,count) {
     for (let item of iter) {
         if (count <= 0){ break; }
