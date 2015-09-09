@@ -18,14 +18,10 @@
   "author": "Justin Falcone <justin@justinfalcone.com>",
   "license": "MIT",
   "devDependencies": {
+    "babel": "^5.8.23",
     "babel-eslint": "^3.1.23",
-    "eslint": "^1.0.0-rc-1"
-  },
-  "peerDependencies": {
-    "babel": "^5"
-  },
-  "dependencies": {
     "babel-tape-runner": "^1.2.0",
+    "eslint": "^1.0.0-rc-1",
     "faucet": "0.0.1",
     "tape": "^4.2.0"
   }
