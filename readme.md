@@ -1,25 +1,34 @@
+# Unmethods
+
 [![Build Status](https://travis-ci.org/modernserf/unmethods.svg)](https://travis-ci.org/modernserf/unmethods)
 
-# Usage
+Unmethods: useful JavaScript functions designed for modern types and syntax.
 
 ```
-import { map, take, into } from "unmethods/iterator";
-
+import { map, take, into } from "unmethods";
 const results = aHugeList::map((x) => x.toUpperCase())::take(5)::into(Array);
-
 ```
 
-All functions can be called normally, curried or pipelined, e.g.
+## Protocols
 
-```
+Like underscore, unmethods provides functions for working with arrays and objects. Unlike underscore, which operates on arrays and objects, unmethods operate on protocols, like the ES6 iterator protocol (for lazy collections) and the experimental keyed protocol (for key-value stores). This means that the same set of functions operate on all kinds of collections, such as ES6's Map and Set; new collection types need to only implement the basic protocol to use all of the unmethods. 
+
+## Uniform Function Call Syntax
+
+Most of the functions provided here can be called in three different ways:
+
+```js
+// traditional
 const a = map(list,fn);
+// curried
 const b = map(fn)(list);
+// bound
 const c = list::map(fn);
 ```
 
-are identical.
+All thrree of these are identical.
 
-# Interfaces and Protocols
+# Background
 
 ES2015, the newest iteration of JavaScript, introduces a ton of new features, types, and syntactic sugar. Those have all been explored pretty thoroughly, but the one that has the greatest implications for JavaScript are iterators; not the construct in itself but the use of the Iterator protocol.
 
@@ -93,7 +102,7 @@ infiniteButts::map((x) => x.toUpperCase())::take(5)::toArray();
 
 `map`, `take`, and `toArray` are all related functions and are used like methods, but they are not attached to any object --  they can be bound to anything that conforms to the `Symbol.iterator` protocol.
 
-# Interfaces and Protocols, part II
+# Interfaces and Protocols
 
 What if we used symbols and free methods to define some interfaces of our own?
 
