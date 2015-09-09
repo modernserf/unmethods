@@ -1,7 +1,7 @@
 {
   "name": "unmethods",
   "version": "1.0.0",
-  "description": "",
+  "description": "chainable utility functions for ES.maybe",
   "main": "index.js",
   "repository": {
     "type": "git",

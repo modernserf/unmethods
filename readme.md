@@ -1,6 +1,25 @@
-# Interfaces and protocols
+# Usage
 
-ES2015, The newest iteration of JavaScript, introduces a ton of new features, types, and syntactic sugar. Those have all been explored pretty thoroughly, but the one that has the greatest implications for JavaScript are iterators; not the construct in itself but the use of the Iterator protocol.
+```
+import { map, take, into } from "unmethods/iterator";
+
+const results = aHugeList::map((x) => x.toUpperCase())::take(5)::into(Array);
+
+```
+
+All functions can be called normally, curried or pipelined, e.g.
+
+```
+const a = map(list,fn);
+const b = map(fn)(list);
+const c = list::map(fn);
+```
+
+are identical.
+
+# Interfaces and Protocols
+
+ES2015, the newest iteration of JavaScript, introduces a ton of new features, types, and syntactic sugar. Those have all been explored pretty thoroughly, but the one that has the greatest implications for JavaScript are iterators; not the construct in itself but the use of the Iterator protocol.
 
 Iterators are made possible by two new features: [symbols](http://www.2ality.com/2014/12/es6-symbols.html) and [generators](http://www.2ality.com/2015/03/es6-generators.html). Iterators are not necessarily a feature on their own, but rather a _set of conventions_ around symbols and generators:
 
