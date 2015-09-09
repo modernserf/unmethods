@@ -1,0 +1,314 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Iterator | Unmethods</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 2.3.2">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="../gitbook/style.css">
+    
+    
+
+        
+    
+    
+    <link rel="next" href="../docs/keyed.html" />
+    
+    
+    <link rel="prev" href="../index.html" />
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book" data-level="1" data-basepath=".." data-revision="Wed Sep 09 2015 18:07:11 GMT-0400 (EDT)">
+    
+
+<div class="book-summary">
+    <div class="book-search">
+        <input type="text" placeholder="Type to search" class="form-control" />
+    </div>
+    <ul class="summary">
+        
+        
+        
+        
+
+        
+
+        
+    
+        <li class="chapter " data-level="0" data-path="index.html">
+            
+                
+                    <a href="../index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Introduction
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter active" data-level="1" data-path="docs/iterator.html">
+            
+                
+                    <a href="../docs/iterator.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                        Iterator
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2" data-path="docs/keyed.html">
+            
+                
+                    <a href="../docs/keyed.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.</b>
+                        
+                        Keyed
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3" data-path="docs/relation.html">
+            
+                
+                    <a href="../docs/relation.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.</b>
+                        
+                        Relation
+                    </a>
+            
+            
+        </li>
+    
+
+
+        
+        <li class="divider"></li>
+        <li>
+            <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                Published with GitBook
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header">
+    <!-- Actions Left -->
+    <a href="#" class="btn pull-left toggle-summary" aria-label="Table of Contents"><i class="fa fa-align-justify"></i></a>
+    <a href="#" class="btn pull-left toggle-search" aria-label="Search"><i class="fa fa-search"></i></a>
+    
+    <div id="font-settings-wrapper" class="dropdown pull-left">
+        <a href="#" class="btn toggle-dropdown" aria-label="Font Settings"><i class="fa fa-font"></i>
+        </a>
+        <div class="dropdown-menu font-settings">
+    <div class="dropdown-caret">
+        <span class="caret-outer"></span>
+        <span class="caret-inner"></span>
+    </div>
+
+    <div class="buttons">
+        <button type="button" id="reduce-font-size" class="button size-2">A</button>
+        <button type="button" id="enlarge-font-size" class="button size-2">A</button>
+    </div>
+
+    <div class="buttons font-family-list">
+        <button type="button" data-font="0" class="button">Serif</button>
+        <button type="button" data-font="1" class="button">Sans</button>
+    </div>
+
+    <div class="buttons color-theme-list">
+        <button type="button" id="color-theme-preview-0" class="button size-3" data-theme="0">White</button>
+        <button type="button" id="color-theme-preview-1" class="button size-3" data-theme="1">Sepia</button>
+        <button type="button" id="color-theme-preview-2" class="button size-3" data-theme="2">Night</button>
+    </div>
+</div>
+
+    </div>
+
+    <!-- Actions Right -->
+    
+    <div class="dropdown pull-right">
+        <a href="#" class="btn toggle-dropdown" aria-label="Share"><i class="fa fa-share-alt"></i>
+        </a>
+        <div class="dropdown-menu font-settings dropdown-left">
+            <div class="dropdown-caret">
+                <span class="caret-outer"></span>
+                <span class="caret-inner"></span>
+            </div>
+            <div class="buttons">
+                <button type="button" data-sharing="twitter" class="button">
+                    Share on Twitter
+                </button>
+                <button type="button" data-sharing="google-plus" class="button">
+                    Share on Google
+                </button>
+                <button type="button" data-sharing="facebook" class="button">
+                    Share on Facebook
+                </button>
+                <button type="button" data-sharing="weibo" class="button">
+                    Share on Weibo
+                </button>
+                <button type="button" data-sharing="instapaper" class="button">
+                    Share on Instapaper
+                </button>
+            </div>
+        </div>
+    </div>
+    
+
+    
+    <a href="#" target="_blank" class="btn pull-right google-plus-sharing-link sharing-link" data-sharing="google-plus" aria-label="Google"><i class="fa fa-google-plus"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right facebook-sharing-link sharing-link" data-sharing="facebook" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+    
+    
+    
+
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../" >Unmethods</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <h1 id="iterator">Iterator</h1>
+<p>Functions that operate on iterable collections, e.g. Array, Map, Set and generators. </p>
+<p>Functions that return iterators are lazy.</p>
+<h2 id="concat">concat</h2>
+<p><code>foo::concat(bar) :: Iter f : Iter f -&gt; Iter f</code></p>
+<p>Returns an iterator of the items of <code>foo</code> followed by the items of <code>bar</code>.</p>
+<h2 id="cons">cons</h2>
+<p><code>foo::cons(bar) Iter f : f -&gt; Iter f</code></p>
+<p>Returns an iterator starting with item <code>bar</code> followed by the items of <code>foo</code>.</p>
+<h2 id="drop">drop</h2>
+<p><code>foo::drop(count) :: Iter f : Number -&gt; Iter f</code></p>
+<p>Returns an iterator of the items of <code>foo</code> after <code>count</code> items.</p>
+<h2 id="dropwhile">dropWhile</h2>
+<p><code>foo::dropWhile(pred) :: Iter f : (f -&gt; Boolean) -&gt; Iter f</code></p>
+<p>Returns an iterator of the items of <code>foo</code> after <code>pred</code> has returned true.</p>
+<h2 id="filter">filter</h2>
+<p><code>foo::filter(pred) :: Iter f : (f -&gt; Boolean) -&gt; Iter f</code></p>
+<p>Returns an iterator of the items of <code>foo</code> where <code>pred</code> returns true.</p>
+<h2 id="first">first</h2>
+<p><code>foo::first(otherwise) ::  Iter f : f -&gt; f</code></p>
+<p>If iterator <code>foo</code> has items, returns the first; otherwise returns <code>otherwise</code>.</p>
+<h2 id="flatmap">flatMap</h2>
+<p><code>foo::flatMap(flatMapper) :: Iter f : (f -&gt; Iter g) -&gt; Iter g</code></p>
+<p>Returns an iterator of the results of <code>flatMapper</code> concatenated. </p>
+<h2 id="foreach-eager">forEach (eager)</h2>
+<p><code>foo::forEach(fn) :: Iter f : (f -&gt; g) -&gt; Iter f</code></p>
+<p>Calls <code>fn</code> on each item of <code>foo</code> for side effects, returning <code>foo</code>.</p>
+<h2 id="generate-non-curried">generate (non-curried)</h2>
+<p><code>generate(seed,genFn) ::  f, (f -&gt; f) -&gt; Iter f</code></p>
+<p>Returns an iterator of the repeated application of <code>genFn</code> on the previous result, starting with <code>seed</code>. Like <code>reduce</code> in reverse.</p>
+<h2 id="into-eager">into (eager)</h2>
+<p><code>foo::into(Constructor) :: Iter f : G -&gt; G f</code></p>
+<p>Returns a new object of type <code>Constructor</code> populated with the items of <code>foo</code>.</p>
+<h2 id="map">map</h2>
+<p><code>foo::map(f) :: Iter f : (f -&gt; g) -&gt; Iter g</code></p>
+<p>Returns an iterator of <code>f</code> applied to each item of <code>foo</code>.</p>
+<h2 id="partition-eager">partition (eager)</h2>
+<p><code>foo::partition(getKey) :: Iter f : (f -&gt; g) -&gt; Map g [f]</code></p>
+<p>Partitions an iterator into a Map of Arrays.</p>
+<h2 id="push">push</h2>
+<p><code>foo::push(bar) :: Iter f : f -&gt; Iter f</code></p>
+<p>Returns an iterator starting with the items of <code>foo</code> , followed by the item <code>bar</code>.</p>
+<h2 id="reduce-eager">reduce (eager)</h2>
+<p><code>foo::reduce(reducerFn, init) :: Iter f : (g, f -&gt; g), g -&gt; g</code></p>
+<p>Reduces the items of <code>foo</code> with <code>reducerFn</code>.</p>
+<h2 id="scan">scan</h2>
+<p><code>foo::scan(reducer,init)  Iter f : (g, f -&gt; g), g -&gt; Iter g</code></p>
+<p>Like <code>reduce</code>, but returns an iterator of each step of the reduction.</p>
+<h2 id="sort-eager">sort (eager)</h2>
+<p><code>foo::sort(comparator) :: Iter f : (f,f -&gt; Number) -&gt; Iter f</code></p>
+<p>Sort <code>foo</code> with <code>comparator</code>.  Same as <code>Array.prototype.sort</code>.</p>
+<h2 id="sortby-eager">sortBy (eager)</h2>
+<p><code>foo::sortBy(getter) :: Iter f : (f -&gt; g) -&gt; Iter f</code></p>
+<p>Sort <code>foo</code> by comparing value returned by <code>getter</code>.</p>
+<h2 id="take">take</h2>
+<p><code>foo::take(count) :: Iter f : Number -&gt; Iter f</code></p>
+<p>Returns an iterator of the first <code>count</code> items of <code>foo</code>.</p>
+<h2 id="takewhile">takeWhile</h2>
+<p><code>foo::takeWhile(pred) :: Iter f : (f -&gt; Boolean) -&gt; Iter f</code></p>
+<p>Returns an iterator of the items of foo while <code>pred</code> returns true. </p>
+<h2 id="unique">unique</h2>
+<p><code>foo::unique() :: Iter f : Iter f</code></p>
+<p>Returns an iterator of unique items of <code>foo</code>.</p>
+<p>``</p>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="../index.html" class="navigation navigation-prev " aria-label="Previous page: Introduction"><i class="fa fa-angle-left"></i></a>
+        
+        
+        <a href="../docs/keyed.html" class="navigation navigation-next " aria-label="Next page: Keyed"><i class="fa fa-angle-right"></i></a>
+        
+    </div>
+</div>
+
+        
+<script src="../gitbook/app.js"></script>
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"fontSettings":{"theme":null,"family":"sans","size":2}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>
