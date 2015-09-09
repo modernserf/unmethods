@@ -8,7 +8,7 @@
     "url": "git@github.com:modernserf/unmethods.git"
   },
   "scripts": {
-    "install": "./node_modules/.bin/babel src/ -d ./",
+    "publish": "./node_modules/.bin/babel src/ -d ./",
     "lint": "node node_modules/eslint/bin/eslint.js src/ --ext .js",
     "tape": "node_modules/.bin/babel-tape-runner src/**/*-test.js | node_modules/.bin/faucet",
     "tape-runner": "npm run tape || tput bel",

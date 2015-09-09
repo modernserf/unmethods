@@ -1,6 +1,8 @@
 import test from "tape";
 import { get } from "./keyed";
-import { pluck, select, project, where, join, index } from "./relation";
+import { select, project, where,
+    pluck, groupBy, orderBy,
+    join, index, zip } from "./relation";
 
 test("pluck", (assert) => {
     const rel = [{
@@ -54,8 +56,41 @@ test("where", (assert) => {
     assert.end();
 });
 
-test.skip("groupby");
-test.skip("orderby");
+test("groupBy",(assert) => {
+    const rel = [{
+        id: 1, data: "foo",
+    }, {
+        id: 2, data: "bar",
+    } , {
+        id: 3, data: "foo"
+    }];
+
+    assert.deepEqual(rel::groupBy("data").get("foo"),[
+        { id: 1, data: "foo"}, {id: 3, data: "foo"}
+    ]);
+    assert.deepEqual(rel::groupBy("data").get("bar"),[
+        {id: 2, data: "bar"}
+    ]);
+
+    assert.end();
+});
+
+test("orderBy",(assert) => {
+    const a = [{
+        a: 2, b: 1,
+    },{
+        a: 1, b: 2
+    }];
+
+    assert.deepEqual(a::orderBy("a"),[{
+         a: 1, b: 2
+     },{
+        a: 2, b: 1,
+    }]);
+    assert.deepEqual(a::orderBy("b"),a);
+
+    assert.end();
+});
 
 test("join", (assert) => {
     const a = [{
@@ -87,3 +122,21 @@ test("index",(assert) => {
     assert.deepEqual(idx::get(1),{id: 1, data: "foo"});
     assert.end();
 });
+
+test("zip", (assert) => {
+    const data = {
+        a: [1, 2, 3, 4],
+        b: [2, 4, 6]
+    };
+
+    const res = [
+        {a: 1, b: 2},
+        {a: 2, b: 4},
+        {a: 3, b: 6}
+    ];
+
+    assert.deepEqual([...data::zip()], res);
+    assert.end();
+});
+
+
