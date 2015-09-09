@@ -2,13 +2,13 @@
   "name": "unmethods",
   "version": "1.0.4",
   "description": "chainable utility functions for ES.maybe",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:modernserf/unmethods.git"
   },
   "scripts": {
-    "publish": "./node_modules/.bin/babel src/ -d ./",
+    "publish": "./node_modules/.bin/babel src/ -d dist/",
     "lint": "node node_modules/eslint/bin/eslint.js src/ --ext .js",
     "tape": "node_modules/.bin/babel-tape-runner src/**/*-test.js | node_modules/.bin/faucet",
     "tape-runner": "npm run tape || tput bel",

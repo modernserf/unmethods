@@ -4,7 +4,7 @@ import { get, set, has, remove,
     fetch, fetchIn, fetchEither,
     update, updateIn,
     merge, deepMerge, removeIn,
-    select, omit, rename, match } from "./keyed";
+    pick, omit, rename, match } from "./keyed";
 
 test("get",(assert) => {
     const obj = { foo: "bar"};
@@ -129,9 +129,9 @@ test("removeIn", (assert) => {
     assert.end();
 });
 
-test("select, omit", (assert) => {
+test("pick, omit", (assert) => {
     const obj = { foo: 1, bar: 2, baz: 3 };
-    const s = obj::select(["foo","bar"]);
+    const s = obj::pick(["foo","bar"]);
     assert.deepEqual(s,{foo: 1, bar: 2});
 
     const o = obj::omit(["bar","baz"]);

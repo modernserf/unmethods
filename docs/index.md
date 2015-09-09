@@ -142,7 +142,7 @@ Keyed k v : Keyed k v -> Keyed k v
 
 Keyed k v : [k] -> Keyed k v
 
-## select
+## pick
 
 Keyed k v : Iter k -> Keyed k v
 

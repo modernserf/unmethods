@@ -1,6 +1,6 @@
-import { curry1, curry2, curry3 } from "./function";
+import { curry1, curry2, curry3 }     from "./function";
 import { map, filter, first, reduce } from "./iterator";
-import { keyed } from "./constants";
+import { keyed }                      from "./constants";
 
 Object.prototype[keyed] = function () {
     const self = this;
@@ -122,7 +122,7 @@ export const removeIn = curry2((coll,path) => {
         coll::remove(key);
 });
 
-export const select = curry2((coll, keys) =>
+export const pick = curry2((coll, keys) =>
     keys::reduce((c,key) =>
         coll::has(key) ? c::set(key,coll::get(key)) : c
     , empty(coll)));

@@ -1,14 +1,11 @@
-import { curry1, curry2, curry3 } from "./function";
-import {
-    set, get, merge, entries,
-    select as kSelect,
-    rename, match } from "./keyed";
-import { map, filter, reduce, partition, sortBy, into } from "./iterator";
+import { curry1, curry2, curry3 }                        from "./function";
+import { set, get, merge, entries, pick, rename, match } from "./keyed";
+import { map, filter, reduce, partition, sortBy, into }  from "./iterator";
 
 const compCurry2 = (f,g) => curry2((a,b) => f(a,g(b)));
 
 export const pluck = compCurry2(map,get);
-export const select = compCurry2(map,kSelect);
+export const select = compCurry2(map,pick);
 export const project = compCurry2(map,rename);
 export const where = compCurry2(filter,match);
 export const groupBy = compCurry2(partition,get);
