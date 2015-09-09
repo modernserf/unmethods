@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/modernserf/unmethods.svg)](https://travis-ci.org/modernserf/unmethods)
+
 # Usage
 
 ```
