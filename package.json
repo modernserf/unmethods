@@ -1,6 +1,6 @@
 {
   "name": "unmethods",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "chainable utility functions for ES.maybe",
   "main": "dist/index.js",
   "repository": {
