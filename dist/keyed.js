@@ -24,79 +24,84 @@ Object.prototype[_constants.keyed] = function () {
     var self = this;
 
     // :(
-    switch (this.constructor.name) {
-        case "Map":
+    if (this.constructor === Map || this.constructor.name === "Map") {
+        var _ret = (function () {
             var copy = function copy() {
                 return new _this.constructor(_this);
             };
 
             return {
-                get: function get(key) {
-                    return _this.get(key);
-                },
-                has: function has(key) {
-                    return _this.has(key);
-                },
-                set: function set(key, value) {
-                    return copy().set(key, value);
-                },
-                remove: function remove(key) {
-                    var nextMap = copy();
-                    nextMap["delete"](key);
-                    return nextMap;
-                },
-                entries: function entries() {
-                    return _this.entries();
+                v: {
+                    get: function get(key) {
+                        return _this.get(key);
+                    },
+                    has: function has(key) {
+                        return _this.has(key);
+                    },
+                    set: function set(key, value) {
+                        return copy().set(key, value);
+                    },
+                    remove: function remove(key) {
+                        var nextMap = copy();
+                        nextMap["delete"](key);
+                        return nextMap;
+                    },
+                    entries: function entries() {
+                        return _this.entries();
+                    }
                 }
             };
-        default:
-            return {
-                get: function get(key) {
-                    return _this[key];
-                },
-                has: function has(key) {
-                    return _this.hasOwnProperty(key);
-                },
-                set: function set(key, value) {
-                    return _extends({}, _this, _defineProperty({}, key, value));
-                },
-                remove: function remove(key) {
-                    var dest = {};
-                    for (var k in _this) {
-                        if (k !== key) {
-                            dest[k] = _this[k];
-                        }
+        })();
+
+        if (typeof _ret === "object") return _ret.v;
+    } else {
+        return {
+            get: function get(key) {
+                return _this[key];
+            },
+            has: function has(key) {
+                return _this.hasOwnProperty(key);
+            },
+            set: function set(key, value) {
+                return _extends({}, _this, _defineProperty({}, key, value));
+            },
+            remove: function remove(key) {
+                var dest = {};
+                for (var k in _this) {
+                    if (k !== key) {
+                        dest[k] = _this[k];
                     }
-                    return dest;
-                },
-                entries: regeneratorRuntime.mark(function entries() {
-                    var k;
-                    return regeneratorRuntime.wrap(function entries$(context$2$0) {
-                        while (1) switch (context$2$0.prev = context$2$0.next) {
-                            case 0:
-                                context$2$0.t0 = regeneratorRuntime.keys(self);
+                }
+                return dest;
+            },
+            entries: regeneratorRuntime.mark(function entries() {
+                var k;
+                return regeneratorRuntime.wrap(function entries$(context$2$0) {
+                    while (1) switch (context$2$0.prev = context$2$0.next) {
+                        case 0:
+                            context$2$0.t0 = regeneratorRuntime.keys(self);
 
-                            case 1:
-                                if ((context$2$0.t1 = context$2$0.t0()).done) {
-                                    context$2$0.next = 7;
-                                    break;
-                                }
-
-                                k = context$2$0.t1.value;
-                                context$2$0.next = 5;
-                                return [k, self[k]];
-
-                            case 5:
-                                context$2$0.next = 1;
+                        case 1:
+                            if ((context$2$0.t1 = context$2$0.t0()).done) {
+                                context$2$0.next = 7;
                                 break;
+                            }
 
-                            case 7:
-                            case "end":
-                                return context$2$0.stop();
-                        }
-                    }, entries, this);
-                })
-            };
+                            k = context$2$0.t1.value;
+                            context$2$0.next = 5;
+                            return [k, self[k]];
+
+                        case 5:
+                            context$2$0.next = 1;
+                            break;
+
+                        case 7:
+                        case "end":
+                            return context$2$0.stop();
+                    }
+                }, entries, this);
+            })
+        };
     }
 };
 

@@ -34,7 +34,7 @@ var orderBy = compCurry2(_iterator4.sortBy, _keyed.get);
 exports.orderBy = orderBy;
 var index = (0, _function.curry2)(function (iter, key) {
     return _iterator4.reduce.call(iter, function (m, x) {
-        return _keyed.set.call(m, _keyed.get.call(x, key), x);
+        return m.set(_keyed.get.call(x, key), x);
     }, new Map());
 });
 

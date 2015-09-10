@@ -120,7 +120,8 @@ var _relation = require("./relation");
     }];
 
     var idx = _relation.index.call(rel, "id");
-    assert.deepEqual(_keyed.get.call(idx, 1), { id: 1, data: "foo" });
+    assert.equal(Map, idx.constructor);
+    assert.deepEqual(idx.get(1), { id: 1, data: "foo" });
     assert.end();
 });
 
