@@ -1,5 +1,4 @@
 import test from "tape";
-import { get } from "./keyed";
 import { select, project, where,
     pluck, groupBy, orderBy,
     join, index, zip } from "./relation";
