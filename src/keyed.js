@@ -6,8 +6,7 @@ Object.prototype[keyed] = function () {
     const self = this;
 
     // :(
-    switch (this.constructor.name) {
-    case "Map":
+    if (this.constructor === Map || this.constructor.name === "Map") {
         const copy = () => new this.constructor(this);
 
         return {
@@ -21,7 +20,7 @@ Object.prototype[keyed] = function () {
             },
             entries: () => this.entries()
         };
-    default:
+    } else {
         return {
             get: (key) => this[key],
             has: (key) => this.hasOwnProperty(key),

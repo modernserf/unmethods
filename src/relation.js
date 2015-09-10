@@ -13,7 +13,7 @@ export const groupBy = compCurry2(partition,get);
 export const orderBy = compCurry2(sortBy,get);
 
 export const index = curry2((iter,key) =>
-    iter::reduce((m,x) => m::set(x::get(key),x), new Map()));
+    iter::reduce((m,x) => m.set(x::get(key),x), new Map()));
 
 export const join = curry3(function* (left, right, joinOn){
     for (let l of left) {

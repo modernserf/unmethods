@@ -119,7 +119,8 @@ test("index",(assert) => {
     }];
 
     const idx = rel::index("id");
-    assert.deepEqual(idx::get(1),{id: 1, data: "foo"});
+    assert.equal(Map, idx.constructor);
+    assert.deepEqual(idx.get(1),{id: 1, data: "foo"});
     assert.end();
 });
 
