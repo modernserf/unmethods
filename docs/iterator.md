@@ -9,7 +9,7 @@ Functions that return iterators are lazy.
 Returns an iterator of the items of `foo` followed by the items of `bar`.
 
 ## cons 
-`foo::cons(bar) Iter f : f -> Iter f`
+`foo::cons(bar) :: Iter f : f -> Iter f`
 
 Returns an iterator starting with item `bar` followed by the items of `foo`.
 
@@ -102,5 +102,3 @@ Returns an iterator of the items of foo while `pred` returns true.
 `foo::unique() :: Iter f : Iter f`
 
 Returns an iterator of unique items of `foo`.
-
-``
